@@ -13,9 +13,19 @@ bot.login(process.env.DISCORD_TOKEN!);
 
 const chat = await initializeVoiceChat(bot);
 
+if (!chat) {
+  throw new Error("Could not initialize voice chat!");
+}
+
 const player = createAudioPlayer({ debug: true });
 
 chat?.subscribe(player);
+
+// Close gracefully
+process.on("SIGINT", async () => {
+  chat?.disconnect();
+  process.exit();
+});
 
 while (true) {
   const audioResource = await createAudioResource(
@@ -24,6 +34,7 @@ while (true) {
 
   player.play(audioResource);
 
+  // Auto-restart if stream fails.
   while (!audioResource.ended) {
     await new Promise((cb) => setTimeout(cb, 10_000));
   }
