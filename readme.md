@@ -16,6 +16,4 @@ Official SexFM website: [sexfm.live](https://sexfm.live/)
 - Create and configure `.env` (see [.env.example](.env.example))
 - Run `bun src/index.ts`
 
-You might need to kill it (`Ctrl+C`) and relaunch if it doesn't work a couple of times.
-
 <img src="https://sexfm.live/ilovesexfm.gif" alt="I love SexFM" width=200>
