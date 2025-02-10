@@ -8,9 +8,9 @@ It only plays the music, that's it.
 
 Official SexFM website: [sexfm.live](https://sexfm.live/)
 
-### Bandwith warning
+### Bandwidth warning
 
-I would not recommend running this continuously on connections with limited bandwith.
+I would not recommend running this continuously on connections with limited bandwidth.
 
 The bot consistently takes around 140kb/s (inbound) + 120kb/s (outbound),
 which roughly equals to **920MB / hour** or **720GB / month**.
