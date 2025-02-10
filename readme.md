@@ -1,10 +1,10 @@
 # SexFM discord player (unofficial)
 
-24/7 discord sexfm player
+24/7 discord SexFM player
 
-![picture of sexfm in a "general" voice channel](./imgs/showcase.png)
+<img src="./imgs/showcase.png" alt="Picture of SexFM bot in voice channel named General" width=200>
 
-It only plays the music, that's it.
+<img src="./imgs/presence.png" alt="Picture of Rich Presence that shows current song details" width=200>
 
 Official SexFM website: [sexfm.live](https://sexfm.live/)
 

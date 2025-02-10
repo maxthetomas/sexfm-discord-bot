@@ -1,12 +1,10 @@
 import { ActivityType, Client } from "discord.js";
 import { initializeVoiceChat } from "./audio";
 import { createAudioPlayer, createAudioResource } from "@discordjs/voice";
+import { setupPresence } from "./presence";
 
 const bot = new Client({
   intents: "GuildVoiceStates",
-  presence: {
-    status: "dnd",
-  },
 });
 
 bot.login(process.env.DISCORD_TOKEN!);
@@ -16,6 +14,8 @@ const chat = await initializeVoiceChat(bot);
 if (!chat) {
   throw new Error("[Voice] Could not initialize voice chat!");
 }
+
+setupPresence(bot);
 
 const player = createAudioPlayer();
 
