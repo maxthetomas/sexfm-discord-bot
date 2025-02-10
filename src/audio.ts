@@ -18,13 +18,14 @@ export async function initializeVoiceChat(
   if (voiceChannel === null) return null;
   if (!voiceChannel.isVoiceBased()) return null;
 
-  console.log("Channel found! Name:", voiceChannel.name);
+  console.log("[Voice] Channel found! Name:", voiceChannel.name);
+  console.log("[Voice] Attempting connection!");
 
   // Retry loop
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     try {
       if (attempt > 1) {
-        console.log(`Attempt ${attempt}/${MAX_RETRIES} to connect...`);
+        console.log(`[Voice] Attempt ${attempt}/${MAX_RETRIES} to connect...`);
         await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY));
       }
 
@@ -38,7 +39,7 @@ export async function initializeVoiceChat(
       // Handle disconnection events
       voiceConnection.on("stateChange", async (oldState, newState) => {
         console.log(
-          `Connection transitioned from ${oldState.status} to ${newState.status}`
+          `[Voice] Connection transitioned from ${oldState.status} to ${newState.status}`
         );
 
         if (newState.status === VoiceConnectionStatus.Disconnected) {
@@ -66,7 +67,7 @@ export async function initializeVoiceChat(
           }
         } else if (newState.status === VoiceConnectionStatus.Destroyed) {
           // Connection was destroyed, you might want to reconnect here
-          console.log("Voice connection was destroyed");
+          console.log("[Voice] Voice connection was destroyed");
         }
       });
 
@@ -77,23 +78,23 @@ export async function initializeVoiceChat(
 
         // Double check we're still connected
         if (voiceConnection.state.status === VoiceConnectionStatus.Ready) {
-          console.log("Successfully connected to voice channel!");
+          console.log("[Voice] Successfully connected to voice channel!");
           return voiceConnection;
         } else {
-          throw new Error("Connection became unstable");
+          throw new Error("[Voice] Connection became unstable");
         }
       } catch (error) {
-        console.error(`Connection attempt ${attempt} failed:`, error);
+        console.error(`[Voice] Connection attempt ${attempt} failed:`, error);
         voiceConnection.destroy();
         if (attempt === MAX_RETRIES) {
-          console.error("All connection attempts failed");
+          console.error("[Voice] All connection attempts failed");
           return null;
         }
         // Continue to next retry
       }
     } catch (error) {
       console.error(
-        `Failed to create voice connection (attempt ${attempt}):`,
+        `[Voice] Failed to create voice connection (attempt ${attempt}):`,
         error
       );
       if (attempt === MAX_RETRIES) {

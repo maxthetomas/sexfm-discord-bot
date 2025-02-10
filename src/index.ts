@@ -14,10 +14,14 @@ bot.login(process.env.DISCORD_TOKEN!);
 const chat = await initializeVoiceChat(bot);
 
 if (!chat) {
-  throw new Error("Could not initialize voice chat!");
+  throw new Error("[Voice] Could not initialize voice chat!");
 }
 
-const player = createAudioPlayer({ debug: true });
+const player = createAudioPlayer();
+
+player.on("stateChange", ({ status: oldStatus }, { status: newStatus }) => {
+  console.log(`[Player] State change: ${oldStatus} -> ${newStatus}`);
+});
 
 chat?.subscribe(player);
 
