@@ -5,6 +5,15 @@ import { setupPresence } from "./presence";
 
 const bot = new Client({
   intents: "GuildVoiceStates",
+  presence: {
+    status: "idle",
+    activities: [
+      {
+        type: ActivityType.Custom,
+        name: "🌐 Logging onto World Wide Web...",
+      },
+    ],
+  },
 });
 
 bot.login(process.env.DISCORD_TOKEN!);

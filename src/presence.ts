@@ -1,13 +1,5 @@
 import { ActivityType, Client } from "discord.js";
 
-async function fetchLive365Api() {
-  let req = await fetch("https://api.live365.com/station/a25222");
-  if (req.status !== 200) {
-    return { "current-song": null };
-  }
-  return await req.json();
-}
-
 type CurrentTrack = {
   title: string;
   artist: string;
@@ -21,6 +13,14 @@ type CurrentTrack = {
   status: string;
 };
 
+async function fetchLive365Api(): Promise<CurrentTrack | null> {
+  let req = await fetch("https://api.live365.com/station/a25222");
+  if (req.status !== 200) {
+    return null;
+  }
+  return (await req.json())["current-track"];
+}
+
 const UPDATE_PRESENCE_OFFSET = 10_000;
 let last_fetch_time = -1;
 
@@ -31,9 +31,7 @@ async function updatePresence(bot: Client) {
   if (Date.now() - last_fetch_time < 10_000)
     await new Promise((cb) => setTimeout(cb, 10_000));
 
-  const current_song = (await fetchLive365Api())[
-    "current-track"
-  ] as CurrentTrack | null;
+  const current_song = await fetchLive365Api();
 
   if (current_song === null) {
     console.log("[Song] Error while fetching current song!");
@@ -41,8 +39,11 @@ async function updatePresence(bot: Client) {
     return;
   }
 
-  if (Object.is(previous_song, current_song)) {
-    setTimeout(() => updatePresence(bot), 10_000);
+  if (
+    previous_song?.title === current_song.title &&
+    previous_song?.artist === current_song.artist
+  ) {
+    setTimeout(() => updatePresence(bot), 15_000);
     return;
   }
 
@@ -61,14 +62,14 @@ async function updatePresence(bot: Client) {
       `(${(current_song.duration / 60).toFixed(1)}m)`
   );
 
-  last_fetch_time = Date.now();
-
+  bot.user?.setStatus("online");
   bot.user?.setActivity({
     type: ActivityType.Listening,
     name: "SexFM",
     state: `${artist} - ${title}`,
   });
 
+  last_fetch_time = Date.now();
   previous_song = current_song;
 }
 
