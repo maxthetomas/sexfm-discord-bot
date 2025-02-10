@@ -23,7 +23,9 @@ chat?.subscribe(player);
 
 // Close gracefully
 process.on("SIGINT", async () => {
-  chat?.disconnect();
+  await chat?.disconnect();
+
+  await new Promise((cb) => setTimeout(cb, 1_000));
   process.exit();
 });
 
