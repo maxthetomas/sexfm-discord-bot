@@ -36,8 +36,11 @@ chat?.subscribe(player);
 
 // Close gracefully
 process.on("SIGINT", async () => {
+  bot.user?.setPresence({ status: "invisible" });
+
   await chat?.disconnect();
 
+  await bot.destroy();
   await new Promise((cb) => setTimeout(cb, 1_000));
   process.exit();
 });
